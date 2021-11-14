@@ -7,8 +7,11 @@ public class PlayerController : MonoBehaviour
 {
     PlayerControls controls;
     Vector2 move;
+    float look;
     private bool onGround = true;
+    private float xRot;
     [SerializeField] private Rigidbody rb;
+    [SerializeField] private Transform playerCamera;
     [SerializeField] private float speed;
     [SerializeField] private float sensitivity;
     [SerializeField] private float jumpForce;
@@ -16,10 +19,13 @@ public class PlayerController : MonoBehaviour
     void Awake()
     {
         controls = new PlayerControls();
-        controls.Player.Buttons.performed += ctx => Buttons_performed(ctx.control);
+        controls.Player.Buttons.performed += ctx => ButtonsPerformed(ctx.control);
         controls.Player.Move.performed += ctx => SendMessage(ctx.ReadValue<Vector2>());
         controls.Player.Move.performed += ctx => move = ctx.ReadValue<Vector2>();
         controls.Player.Move.canceled += ctx => move = Vector2.zero;
+
+        controls.Player.Look.performed += ctx => MovePlayerCamera(ctx.ReadValue<float>());
+        controls.Player.Look.performed += ctx => look = ctx.ReadValue<float>();
     }
 
     private void OnEnable()
@@ -32,18 +38,25 @@ public class PlayerController : MonoBehaviour
     }
     void SendMessage(Vector2 coordinates)
     {
+        //Tests LEFT thumbstick input
         Debug.Log("Thumb-stick coordinates = " + coordinates);
     }
-
     void FixedUpdate()
     {
-        Vector3 movement = new Vector3(move.x, 0.0f, move.y) * speed
-                                                             * Time.deltaTime;
-        transform.Translate(movement, Space.World);
+        //To move the player in regards to their position and rotation
+        Vector3 movement = new Vector3(move.x, 0.0f, move.y) * speed * Time.deltaTime;
+        transform.Translate(movement, Space.Self);
     }
-    private void Buttons_performed(InputControl control)
+    private void MovePlayerCamera(float input)
     {
+        //To move the player's character AND camera
+
+    }
+    private void ButtonsPerformed(InputControl control)
+    {
+        //Checks any buttons pressed on controller
         Debug.Log($"Buttons performed received: {control.name}, {control.displayName}");
+        //button 3 is "A" on Switch controller
         if (control.name == "button3" && onGround == true)
         {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
