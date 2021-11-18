@@ -30,17 +30,25 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""name"": ""Move"",
                     ""type"": ""Value"",
                     ""id"": ""133e51a2-6fec-4bfc-9080-0f5cb4ee8155"",
-                    ""expectedControlType"": ""Vector2"",
+                    ""expectedControlType"": ""Axis"",
                     ""processors"": """",
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""Look"",
+                    ""name"": ""Horizontal Look"",
                     ""type"": ""Value"",
                     ""id"": ""66f675c1-3979-47a4-ac15-cd1e97c9bc8d"",
                     ""expectedControlType"": ""Axis"",
                     ""processors"": """",
-                    ""interactions"": ""Hold""
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Vertical Look"",
+                    ""type"": ""Value"",
+                    ""id"": ""0b11f9a3-68d5-4728-bad3-bfa640024582"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -80,11 +88,22 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""ee15fb20-922d-4491-9b7f-4bd9a1e3dfe3"",
+                    ""path"": ""<HID::Bensussen Deutsch & Associates,Inc.(BDA) NSW Spectra Wired Controller>/z"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Controller"",
+                    ""action"": ""Horizontal Look"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8edc920b-352b-4f11-abcb-db696f316420"",
                     ""path"": ""<HID::Bensussen Deutsch & Associates,Inc.(BDA) NSW Spectra Wired Controller>/rz"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Controller"",
-                    ""action"": ""Look"",
+                    ""action"": ""Vertical Look"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -210,7 +229,8 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Buttons = m_Player.FindAction("Buttons", throwIfNotFound: true);
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
-        m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
+        m_Player_HorizontalLook = m_Player.FindAction("Horizontal Look", throwIfNotFound: true);
+        m_Player_VerticalLook = m_Player.FindAction("Vertical Look", throwIfNotFound: true);
         // Player 2
         m_Player2 = asset.FindActionMap("Player 2", throwIfNotFound: true);
         m_Player2_Move = m_Player2.FindAction("Move", throwIfNotFound: true);
@@ -266,14 +286,16 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     private IPlayerActions m_PlayerActionsCallbackInterface;
     private readonly InputAction m_Player_Buttons;
     private readonly InputAction m_Player_Move;
-    private readonly InputAction m_Player_Look;
+    private readonly InputAction m_Player_HorizontalLook;
+    private readonly InputAction m_Player_VerticalLook;
     public struct PlayerActions
     {
         private @PlayerControls m_Wrapper;
         public PlayerActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Buttons => m_Wrapper.m_Player_Buttons;
         public InputAction @Move => m_Wrapper.m_Player_Move;
-        public InputAction @Look => m_Wrapper.m_Player_Look;
+        public InputAction @HorizontalLook => m_Wrapper.m_Player_HorizontalLook;
+        public InputAction @VerticalLook => m_Wrapper.m_Player_VerticalLook;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -289,9 +311,12 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Move.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMove;
                 @Move.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMove;
                 @Move.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMove;
-                @Look.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLook;
-                @Look.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLook;
-                @Look.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLook;
+                @HorizontalLook.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHorizontalLook;
+                @HorizontalLook.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHorizontalLook;
+                @HorizontalLook.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHorizontalLook;
+                @VerticalLook.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnVerticalLook;
+                @VerticalLook.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnVerticalLook;
+                @VerticalLook.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnVerticalLook;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -302,9 +327,12 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Move.started += instance.OnMove;
                 @Move.performed += instance.OnMove;
                 @Move.canceled += instance.OnMove;
-                @Look.started += instance.OnLook;
-                @Look.performed += instance.OnLook;
-                @Look.canceled += instance.OnLook;
+                @HorizontalLook.started += instance.OnHorizontalLook;
+                @HorizontalLook.performed += instance.OnHorizontalLook;
+                @HorizontalLook.canceled += instance.OnHorizontalLook;
+                @VerticalLook.started += instance.OnVerticalLook;
+                @VerticalLook.performed += instance.OnVerticalLook;
+                @VerticalLook.canceled += instance.OnVerticalLook;
             }
         }
     }
@@ -372,7 +400,8 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     {
         void OnButtons(InputAction.CallbackContext context);
         void OnMove(InputAction.CallbackContext context);
-        void OnLook(InputAction.CallbackContext context);
+        void OnHorizontalLook(InputAction.CallbackContext context);
+        void OnVerticalLook(InputAction.CallbackContext context);
     }
     public interface IPlayer2Actions
     {

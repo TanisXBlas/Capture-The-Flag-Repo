@@ -17,17 +17,25 @@
                     "name": "Move",
                     "type": "Value",
                     "id": "133e51a2-6fec-4bfc-9080-0f5cb4ee8155",
-                    "expectedControlType": "Vector2",
+                    "expectedControlType": "Axis",
                     "processors": "",
                     "interactions": ""
                 },
                 {
-                    "name": "Look",
+                    "name": "Horizontal Look",
                     "type": "Value",
                     "id": "66f675c1-3979-47a4-ac15-cd1e97c9bc8d",
                     "expectedControlType": "Axis",
                     "processors": "",
-                    "interactions": "Hold"
+                    "interactions": ""
+                },
+                {
+                    "name": "Vertical Look",
+                    "type": "Value",
+                    "id": "0b11f9a3-68d5-4728-bad3-bfa640024582",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -67,11 +75,22 @@
                 {
                     "name": "",
                     "id": "ee15fb20-922d-4491-9b7f-4bd9a1e3dfe3",
+                    "path": "<HID::Bensussen Deutsch & Associates,Inc.(BDA) NSW Spectra Wired Controller>/z",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Controller",
+                    "action": "Horizontal Look",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8edc920b-352b-4f11-abcb-db696f316420",
                     "path": "<HID::Bensussen Deutsch & Associates,Inc.(BDA) NSW Spectra Wired Controller>/rz",
                     "interactions": "",
                     "processors": "",
                     "groups": "Controller",
-                    "action": "Look",
+                    "action": "Vertical Look",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -7,9 +7,10 @@ public class PlayerController : MonoBehaviour
 {
     PlayerControls controls;
     Vector2 move;
-    float look;
+    float horizontalLook;
     private bool onGround = true;
     private float xRot;
+    private Vector3 thumbStickInput;
     [SerializeField] private Rigidbody rb;
     [SerializeField] private Transform playerCamera;
     [SerializeField] private float speed;
@@ -24,8 +25,8 @@ public class PlayerController : MonoBehaviour
         controls.Player.Move.performed += ctx => move = ctx.ReadValue<Vector2>();
         controls.Player.Move.canceled += ctx => move = Vector2.zero;
 
-        controls.Player.Look.performed += ctx => MovePlayerCamera(ctx.ReadValue<float>());
-        controls.Player.Look.performed += ctx => look = ctx.ReadValue<float>();
+        controls.Player.HorizontalLook.performed += ctx => MovePlayerCamera(ctx.control);
+        controls.Player.HorizontalLook.performed += ctx => horizontalLook = ctx.ReadValue<float>();
     }
 
     private void OnEnable()
@@ -47,10 +48,19 @@ public class PlayerController : MonoBehaviour
         Vector3 movement = new Vector3(move.x, 0.0f, move.y) * speed * Time.deltaTime;
         transform.Translate(movement, Space.Self);
     }
-    private void MovePlayerCamera(float input)
+	private void Update()
+	{
+
+    }
+	private void MovePlayerCamera(InputControl control)
     {
         //To move the player's character AND camera
+        Debug.Log("Moving camera...");
 
+        if (control.name == "z")
+        {
+            
+        }
     }
     private void ButtonsPerformed(InputControl control)
     {
