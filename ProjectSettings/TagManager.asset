@@ -10,6 +10,10 @@ TagManager:
   - Model
   - Red
   - Blue
+  - Flag Platform
+  - Wall
+  - Item
+  - DeadZone
   layers:
   - Default
   - TransparentFX
