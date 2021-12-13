@@ -48,10 +48,9 @@ public class GameMechanics : MonoBehaviour
                     Transform spawn = GameObject.Find("Blue Flag Spawn").transform;
                     flagReturn.transform.parent = spawn;
                     //Resets the transform of the FlagObject to match that of the flag's spawn 
-                    flagReturn.transform.localPosition = new Vector3(0f, 1.5f, 0f);
+                    flagReturn.transform.localPosition = new Vector3(0f, flagLift, 0f);
                     flagReturn.transform.localRotation = spawn.transform.localRotation;
                 }
-
             }
         }
     }
